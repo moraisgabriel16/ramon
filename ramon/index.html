@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ramon Melo — Vídeo, Direção &amp; Edição</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Archivo:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+:root{
+  --bg-deep:#0d1a12;
+  --bg-panel:#16301f;
+  --bg-panel-2:#1c3a26;
+  --cream:#f2ede1;
+  --cream-dim:#cfc9b8;
+  --red:#ff4433;
+  --lime:#c6ff3d;
+  --olive:#7f9269;
+  --line:rgba(242,237,225,0.14);
+  --radius:2px;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+
+html{scroll-behavior:smooth;}
+
+body{
+  background:var(--bg-deep);
+  color:var(--cream);
+  font-family:'Archivo',sans-serif;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+
+::selection{background:var(--lime);color:var(--bg-deep);}
+
+.wrap{
+  max-width:1180px;
+  margin:0 auto;
+  padding:0 32px;
+}
+
+h1,h2,h3{
+  font-family:'Anton',sans-serif;
+  font-weight:400;
+  text-transform:uppercase;
+  letter-spacing:0.01em;
+  line-height:0.95;
+}
+
+.mono{
+  font-family:'JetBrains Mono',monospace;
+}
+
+a{color:inherit;text-decoration:none;}
+
+img{display:block;max-width:100%;}
+
+/* ---------- grain / noise overlay ---------- */
+.grain{
+  position:fixed;inset:0;
+  pointer-events:none;
+  z-index:200;
+  opacity:0.05;
+  mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ---------- REC indicator ---------- */
+.rec-dot{
+  display:inline-block;
+  width:9px;height:9px;
+  border-radius:50%;
+  background:var(--red);
+  box-shadow:0 0 8px 1px rgba(255,68,51,0.7);
+  animation:blink 1.4s ease-in-out infinite;
+  flex-shrink:0;
+}
+@keyframes blink{
+  0%,100%{opacity:1;}
+  50%{opacity:0.25;}
+}
+.rec-tag{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:12px;letter-spacing:0.18em;
+  color:var(--cream-dim);
+  text-transform:uppercase;
+}
+
+/* ---------- viewfinder corners (signature element) ---------- */
+.vf{
+  position:relative;
+}
+.vf::before,.vf::after,
+.vf .c3,.vf .c4{
+  content:'';
+  position:absolute;
+  width:22px;height:22px;
+  border:2px solid var(--lime);
+  opacity:0;
+  transition:opacity .35s ease, transform .35s ease;
+  z-index:5;
+}
+.vf::before{top:-1px;left:-1px;border-right:none;border-bottom:none;transform:translate(6px,6px);}
+.vf::after{top:-1px;right:-1px;border-left:none;border-bottom:none;transform:translate(-6px,6px);}
+.vf .c3{bottom:-1px;left:-1px;border-right:none;border-top:none;transform:translate(6px,-6px);}
+.vf .c4{bottom:-1px;right:-1px;border-left:none;border-top:none;transform:translate(-6px,-6px);}
+.vf:hover::before,.vf:hover::after,.vf:hover .c3,.vf:hover .c4{
+  opacity:1;transform:translate(0,0);
+}
+.vf-tc{
+  position:absolute;
+  bottom:10px;left:10px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;
+  letter-spacing:0.1em;
+  color:var(--lime);
+  background:rgba(13,26,18,0.75);
+  padding:3px 7px;
+  opacity:0;
+  transition:opacity .35s ease;
+  z-index:6;
+}
+.vf:hover .vf-tc{opacity:1;}
+
+/* ---------- nav ---------- */
+header{
+  position:fixed;top:0;left:0;right:0;
+  z-index:100;
+  background:rgba(13,26,18,0.82);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+}
+.nav-inner{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 32px;
+  max-width:1180px;margin:0 auto;
+}
+.logo-mark{
+  font-family:'Anton',sans-serif;
+  font-size:19px;
+  letter-spacing:0.02em;
+  display:flex;align-items:center;gap:10px;
+}
+nav ul{
+  list-style:none;
+  display:flex;gap:30px;
+}
+nav a{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;
+  letter-spacing:0.14em;
+  text-transform:uppercase;
+  color:var(--cream-dim);
+  transition:color .2s;
+  position:relative;
+}
+nav a:hover{color:var(--lime);}
+.nav-cta{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  border:1px solid var(--lime);
+  color:var(--lime);
+  padding:8px 16px;
+  transition:all .2s;
+  white-space:nowrap;
+}
+.nav-cta:hover{background:var(--lime);color:var(--bg-deep);}
+.burger{display:none;}
+
+/* ---------- hero ---------- */
+.hero{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  position:relative;
+  padding-top:90px;
+  background:
+    radial-gradient(ellipse at 75% 20%, rgba(198,255,61,0.08), transparent 55%),
+    linear-gradient(180deg, var(--bg-deep) 0%, #0a150f 100%);
+  overflow:hidden;
+}
+.hero-grid{
+  display:grid;
+  grid-template-columns:1.05fr 0.95fr;
+  gap:56px;
+  align-items:center;
+  width:100%;
+}
+.hero-eyebrow{
+  margin-bottom:22px;
+}
+.hero h1{
+  font-size:clamp(58px,8vw,108px);
+  color:var(--cream);
+  margin-bottom:6px;
+}
+.hero h1 span{color:var(--lime);}
+.hero-role{
+  font-size:clamp(16px,2.2vw,22px);
+  color:var(--olive);
+  font-weight:600;
+  letter-spacing:0.05em;
+  margin-bottom:28px;
+  font-family:'JetBrains Mono',monospace;
+  text-transform:lowercase;
+}
+.hero-desc{
+  max-width:440px;
+  color:var(--cream-dim);
+  font-size:16px;
+  line-height:1.65;
+  margin-bottom:34px;
+}
+.hero-actions{
+  display:flex;gap:16px;flex-wrap:wrap;
+  margin-bottom:44px;
+}
+.btn-primary{
+  background:var(--lime);
+  color:var(--bg-deep);
+  padding:15px 28px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:12px;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  font-weight:700;
+  display:inline-flex;
+  align-items:center;gap:10px;
+  transition:transform .2s, box-shadow .2s;
+  border:1px solid var(--lime);
+}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(198,255,61,0.25);}
+.btn-ghost{
+  border:1px solid var(--line);
+  color:var(--cream);
+  padding:15px 28px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:12px;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  transition:border-color .2s, color .2s;
+}
+.btn-ghost:hover{border-color:var(--cream);}
+
+.hero-stats{
+  display:flex;
+  gap:36px;
+  border-top:1px solid var(--line);
+  padding-top:24px;
+}
+.stat-num{
+  font-family:'Anton',sans-serif;
+  font-size:30px;
+  color:var(--cream);
+}
+.stat-num span{color:var(--lime);}
+.stat-label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  color:var(--olive);
+  margin-top:4px;
+}
+
+.hero-img-wrap{
+  position:relative;
+}
+.hero-img-frame{
+  position:relative;
+  border:1px solid var(--line);
+  padding:14px;
+}
+.hero-img-frame img{
+  width:100%;
+  height:560px;
+  object-fit:cover;
+  filter:saturate(1.05) contrast(1.05);
+}
+.rec-badge{
+  position:absolute;
+  top:32px;right:32px;
+  display:flex;align-items:center;gap:8px;
+  background:rgba(13,26,18,0.85);
+  padding:8px 14px;
+  border:1px solid rgba(255,68,51,0.5);
+  z-index:5;
+}
+.rec-badge span.txt{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;
+  letter-spacing:0.15em;
+  color:var(--red);
+}
+.tc-strip{
+  position:absolute;
+  bottom:32px;left:32px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;
+  letter-spacing:0.08em;
+  color:var(--lime);
+  background:rgba(13,26,18,0.85);
+  padding:6px 12px;
+}
+
+/* marquee */
+.marquee-strip{
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+  background:var(--bg-panel);
+  overflow:hidden;
+  padding:16px 0;
+}
+.marquee-track{
+  display:flex;
+  gap:60px;
+  width:max-content;
+  animation:scroll 28s linear infinite;
+}
+@keyframes scroll{
+  from{transform:translateX(0);}
+  to{transform:translateX(-50%);}
+}
+.marquee-track span{
+  font-family:'Anton',sans-serif;
+  font-size:20px;
+  color:var(--olive);
+  text-transform:uppercase;
+  letter-spacing:0.03em;
+  white-space:nowrap;
+  display:flex;align-items:center;gap:16px;
+}
+.marquee-track span em{
+  font-style:normal;color:var(--lime);font-size:10px;
+}
+
+/* ---------- section shared ---------- */
+section{
+  padding:120px 0;
+  position:relative;
+}
+.section-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  margin-bottom:56px;
+  gap:24px;
+  flex-wrap:wrap;
+}
+.eyebrow{
+  font-family:'JetBrains Mono',monospace;
+  font-size:12px;
+  letter-spacing:0.18em;
+  text-transform:uppercase;
+  color:var(--lime);
+  margin-bottom:14px;
+  display:flex;align-items:center;gap:10px;
+}
+.eyebrow::before{
+  content:'';
+  width:26px;height:1px;
+  background:var(--lime);
+}
+.section-title{
+  font-size:clamp(34px,4.4vw,54px);
+  color:var(--cream);
+  max-width:640px;
+}
+.section-note{
+  font-size:14px;
+  color:var(--cream-dim);
+  max-width:280px;
+  line-height:1.6;
+  font-family:'Archivo',sans-serif;
+}
+
+/* ---------- quem sou eu ---------- */
+.about{
+  background:var(--bg-deep);
+}
+.about-grid{
+  display:grid;
+  grid-template-columns:0.85fr 1.15fr;
+  gap:64px;
+  align-items:start;
+}
+.about-img{
+  position:relative;
+}
+.about-img img{
+  width:100%;
+  height:640px;
+  object-fit:cover;
+  border:1px solid var(--line);
+}
+.about-text p{
+  font-size:19px;
+  line-height:1.75;
+  color:var(--cream-dim);
+  margin-bottom:26px;
+}
+.about-text p strong{
+  color:var(--cream);
+  font-weight:700;
+}
+.about-text .lead{
+  font-size:24px;
+  color:var(--cream);
+  font-weight:500;
+  line-height:1.5;
+}
+.about-tags{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:34px;
+}
+.tag{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;
+  letter-spacing:0.06em;
+  text-transform:uppercase;
+  padding:9px 14px;
+  border:1px solid var(--line);
+  color:var(--olive);
+}
+
+/* ---------- services ---------- */
+.services{
+  background:var(--bg-panel);
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+}
+.svc-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:1px;
+  background:var(--line);
+  border:1px solid var(--line);
+}
+.svc-card{
+  background:var(--bg-panel);
+  padding:40px 32px;
+  transition:background .25s;
+  position:relative;
+}
+.svc-card:hover{background:var(--bg-panel-2);}
+.svc-tc{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;
+  color:var(--olive);
+  margin-bottom:22px;
+  letter-spacing:0.08em;
+}
+.svc-card h3{
+  font-size:23px;
+  color:var(--cream);
+  margin-bottom:14px;
+  line-height:1.15;
+}
+.svc-card p{
+  font-size:14.5px;
+  color:var(--cream-dim);
+  line-height:1.6;
+}
+.svc-icon{
+  width:34px;height:34px;
+  margin-bottom:20px;
+  color:var(--lime);
+}
+
+/* ---------- artists ---------- */
+.artists-grid{
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  gap:12px;
+}
+.art-item{
+  position:relative;
+  overflow:hidden;
+  aspect-ratio:3/4;
+  border:1px solid var(--line);
+}
+.art-item img{
+  width:100%;height:100%;object-fit:cover;
+  filter:grayscale(0.55) contrast(1.05);
+  transition:filter .4s ease, transform .5s ease;
+}
+.art-item:hover img{
+  filter:grayscale(0);
+  transform:scale(1.06);
+}
+
+/* ---------- brands / emissoras ---------- */
+.brands-wrap{
+  display:grid;
+  grid-template-columns:0.9fr 1.1fr;
+  gap:48px;
+  align-items:center;
+}
+.brand-plate{
+  border:1px solid var(--line);
+  padding:8px;
+}
+.brand-plate img{width:100%;filter:grayscale(1) brightness(1.15);}
+.brand-list{
+  font-family:'JetBrains Mono',monospace;
+}
+.brand-row{
+  display:flex;
+  justify-content:space-between;
+  padding:16px 0;
+  border-bottom:1px solid var(--line);
+  font-size:14px;
+  letter-spacing:0.03em;
+}
+.brand-row span:first-child{color:var(--cream);text-transform:uppercase;}
+.brand-row span:last-child{color:var(--olive);font-size:12px;}
+
+/* ---------- highlight strip (cateter) ---------- */
+.highlight{
+  background:var(--bg-deep);
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+}
+.highlight-inner{
+  display:grid;
+  grid-template-columns:1fr auto;
+  align-items:center;
+  gap:40px;
+  padding:64px 0;
+}
+.highlight h3{
+  font-size:clamp(26px,3.4vw,40px);
+  color:var(--cream);
+  line-height:1.2;
+}
+.highlight h3 em{
+  font-style:normal;color:var(--lime);
+}
+.highlight-badge{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  color:var(--red);
+  border:1px solid rgba(255,68,51,0.5);
+  padding:10px 18px;
+  white-space:nowrap;
+}
+
+/* ---------- gallery (camera na mao) ---------- */
+.gallery-masonry{
+  columns:3;
+  column-gap:14px;
+}
+.gallery-masonry .vf{
+  margin-bottom:14px;
+  break-inside:avoid;
+  border:1px solid var(--line);
+}
+.gallery-masonry img{
+  width:100%;
+  display:block;
+  filter:contrast(1.05);
+}
+
+/* aerial */
+.aerial{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:0;
+  border:1px solid var(--line);
+}
+.aerial-text{
+  padding:64px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  background:var(--bg-panel);
+}
+.aerial-text h3{
+  font-size:clamp(28px,3.6vw,42px);
+  margin-bottom:18px;
+  color:var(--cream);
+}
+.aerial-text h3 em{font-style:normal;color:var(--lime);}
+.aerial-text p{
+  color:var(--cream-dim);
+  font-size:15px;
+  line-height:1.7;
+}
+.aerial-img{
+  position:relative;
+  min-height:340px;
+}
+.aerial-img img{
+  width:100%;height:100%;
+  object-fit:cover;
+  position:absolute;inset:0;
+}
+
+/* ---------- contact ---------- */
+.contact{
+  background:var(--bg-deep);
+  position:relative;
+}
+.contact-grid{
+  display:grid;
+  grid-template-columns:1fr 0.75fr;
+  gap:60px;
+  align-items:center;
+}
+.contact h2{
+  font-size:clamp(44px,6.4vw,88px);
+  color:var(--cream);
+  margin-bottom:28px;
+}
+.contact h2 em{font-style:normal;color:var(--lime);}
+.contact p.lead-c{
+  font-size:17px;
+  color:var(--cream-dim);
+  max-width:440px;
+  margin-bottom:40px;
+  line-height:1.65;
+}
+.contact-links{
+  display:flex;
+  flex-direction:column;
+  gap:0;
+  border-top:1px solid var(--line);
+}
+.contact-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:22px 0;
+  border-bottom:1px solid var(--line);
+  transition:padding-left .25s;
+}
+.contact-row:hover{padding-left:10px;}
+.contact-row .cl{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;
+  color:var(--olive);
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+}
+.contact-row .cv{
+  font-size:19px;
+  font-weight:600;
+  color:var(--cream);
+}
+.contact-row:hover .cv{color:var(--lime);}
+.arrow{
+  color:var(--lime);
+  font-size:20px;
+  transition:transform .25s;
+}
+.contact-row:hover .arrow{transform:translateX(6px);}
+.contact-img{
+  position:relative;
+}
+.contact-img img{
+  width:100%;
+  height:520px;
+  object-fit:cover;
+  border:1px solid var(--line);
+}
+
+footer{
+  border-top:1px solid var(--line);
+  padding:32px 0;
+}
+.footer-inner{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:16px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;
+  color:var(--olive);
+  letter-spacing:0.05em;
+}
+
+/* reveal on scroll */
+.reveal{
+  opacity:0;
+  transform:translateY(24px);
+  transition:opacity .7s ease, transform .7s ease;
+}
+.reveal.in{
+  opacity:1;
+  transform:translateY(0);
+}
+
+/* ---------- responsive ---------- */
+@media(max-width:980px){
+  nav ul{display:none;}
+  .hero-grid{grid-template-columns:1fr;}
+  .hero-img-frame img{height:420px;}
+  .about-grid{grid-template-columns:1fr;}
+  .about-img img{height:400px;}
+  .svc-grid{grid-template-columns:1fr;}
+  .artists-grid{grid-template-columns:repeat(3,1fr);}
+  .brands-wrap{grid-template-columns:1fr;}
+  .gallery-masonry{columns:2;}
+  .aerial{grid-template-columns:1fr;}
+  .aerial-text{padding:40px 28px;}
+  .contact-grid{grid-template-columns:1fr;}
+  .contact-img img{height:340px;}
+  .highlight-inner{grid-template-columns:1fr;text-align:left;}
+}
+@media(max-width:560px){
+  .wrap{padding:0 20px;}
+  .artists-grid{grid-template-columns:repeat(2,1fr);}
+  .gallery-masonry{columns:1;}
+  .hero-stats{flex-wrap:wrap;row-gap:20px;}
+}
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+
+<header>
+  <div class="nav-inner">
+    <div class="logo-mark"><span class="rec-dot"></span>RAMON MELO</div>
+    <nav>
+      <ul>
+        <li><a href="#sobre">Sobre</a></li>
+        <li><a href="#servicos">Serviços</a></li>
+        <li><a href="#artistas">Artistas</a></li>
+        <li><a href="#marcas">Marcas</a></li>
+        <li><a href="#trabalhos">Trabalhos</a></li>
+      </ul>
+    </nav>
+    <a href="https://wa.me/5521999659494" class="nav-cta" target="_blank" rel="noopener">Falar no WhatsApp</a>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero" style="padding-bottom:0;">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <div class="hero-eyebrow">
+          <span class="rec-tag"><span class="rec-dot"></span> GRAVANDO HÁ 16 ANOS</span>
+        </div>
+        <h1>VÍDEO QUE<br>FICA <span>GRAVADO</span></h1>
+        <div class="hero-role">// vídeo · direção · edição</div>
+        <p class="hero-desc">Clipe musical, cobertura de show, evento corporativo ou comercial de marca — eu cuido do audiovisual do início ao corte final, com atenção ao detalhe em cada frame.</p>
+        <div class="hero-actions">
+          <a href="https://wa.me/5521999659494" class="btn-primary" target="_blank" rel="noopener">Dá um alô ↗</a>
+          <a href="#trabalhos" class="btn-ghost">Ver trabalhos</a>
+        </div>
+        <div class="hero-stats">
+          <div>
+            <div class="stat-num">16<span>+</span></div>
+            <div class="stat-label">anos de estrada</div>
+          </div>
+          <div>
+            <div class="stat-num">1<span>ª</span></div>
+            <div class="stat-label">cirurgia de cateter filmada no brasil</div>
+          </div>
+          <div>
+            <div class="stat-num">∞</div>
+            <div class="stat-label">medo de tentar coisa nova</div>
+          </div>
+        </div>
+      </div>
+      <div class="hero-img-wrap">
+        <div class="hero-img-frame vf">
+          <span class="c3"></span><span class="c4"></span>
+          <img src="assets/hero.jpg" alt="Ramon Melo operando câmera de cinema">
+          <span class="vf-tc">00:00:01:12</span>
+        </div>
+        <div class="rec-badge"><span class="rec-dot"></span><span class="txt">REC</span></div>
+        <div class="tc-strip">@ramonmelo.cine</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="marquee-strip">
+  <div class="marquee-track">
+    <span><em>●</em>GLOBO<em>●</em>SBT<em>●</em>GLOBOSAT<em>●</em>GNT<em>●</em>KONDZILLA<em>●</em>SOM LIVRE<em>●</em>NALDO BENNY<em>●</em>MCDONALD'S<em>●</em>TIM<em>●</em>L'ORÉAL<em>●</em>ASSAÍ<em>●</em>PREZUNIC</span>
+    <span><em>●</em>GLOBO<em>●</em>SBT<em>●</em>GLOBOSAT<em>●</em>GNT<em>●</em>KONDZILLA<em>●</em>SOM LIVRE<em>●</em>NALDO BENNY<em>●</em>MCDONALD'S<em>●</em>TIM<em>●</em>L'ORÉAL<em>●</em>ASSAÍ<em>●</em>PREZUNIC</span>
+  </div>
+</div>
+
+<!-- SOBRE -->
+<section class="about" id="sobre">
+  <div class="wrap">
+    <div class="about-grid">
+      <div class="about-img vf reveal">
+        <span class="c3"></span><span class="c4"></span>
+        <img src="assets/bio.jpg" alt="Ramon Melo gravando no festival Manifesto Musical">
+        <span class="vf-tc">MANIFESTO MUSICAL</span>
+      </div>
+      <div class="about-text">
+        <div class="eyebrow">Quem sou eu</div>
+        <p class="lead">Eu trabalho há 16 anos nesse mundão doido do audiovisual.</p>
+        <p>Conquistei muito espaço no mercado — fui desde uma Canon 7D na mão, com a lente do kit, gravando um grupo de pagode dentro de um estúdio, até trabalhos como <strong>show completo da Anitta</strong> em um resort, <strong>festa de aniversário do Nego do Borel</strong> e <strong>clipe com KondZilla</strong>.</p>
+        <p>Eu sempre fui o cara dos <strong>detalhes</strong> — tanto na direção, quanto na operação de câmera e na edição. O cara que dá atenção ao criativo, ao ousado e ao arriscado. Eu nunca tive medo de tentar.</p>
+        <div class="about-tags">
+          <span class="tag">Direção</span>
+          <span class="tag">Operação de câmera</span>
+          <span class="tag">Edição</span>
+          <span class="tag">Drone</span>
+          <span class="tag">Cobertura de eventos</span>
+          <span class="tag">Clipes musicais</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVIÇOS -->
+<section class="services" id="servicos">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <div class="eyebrow">O que eu faço</div>
+        <h2 class="section-title">Serviços de audiovisual, do roteiro ao corte final</h2>
+      </div>
+      <p class="section-note">Vídeo e foto para quem precisa de imagem que comunica — de clipe a evento corporativo.</p>
+    </div>
+    <div class="svc-grid">
+      <div class="svc-card reveal">
+        <div class="svc-tc">CENA 01</div>
+        <h3>Clipe musical</h3>
+        <p>Direção e produção de clipes, do conceito à cor final — com câmera na mão pra capturar a energia certa.</p>
+      </div>
+      <div class="svc-card reveal">
+        <div class="svc-tc">CENA 02</div>
+        <h3>Cobertura de show</h3>
+        <p>Multicâmera em palco, backstage e plateia. Já cobri de festa de estúdio a show completo em resort.</p>
+      </div>
+      <div class="svc-card reveal">
+        <div class="svc-tc">CENA 03</div>
+        <h3>Evento corporativo</h3>
+        <p>Cobertura institucional, entrevistas e making of — inclusive a primeira cirurgia de troca de cateter filmada no Brasil.</p>
+      </div>
+      <div class="svc-card reveal">
+        <div class="svc-tc">CENA 04</div>
+        <h3>Comercial de marca</h3>
+        <p>Vídeos publicitários para marcas e estabelecimentos, do storyboard à entrega — pensados pro seu ponto de venda.</p>
+      </div>
+      <div class="svc-card reveal">
+        <div class="svc-tc">CENA 05</div>
+        <h3>Imagem aérea</h3>
+        <p>Captação com drone para eventos, imóveis e produções que pedem um outro ponto de vista — lá do alto.</p>
+      </div>
+      <div class="svc-card reveal">
+        <div class="svc-tc">CENA 06</div>
+        <h3>Edição &amp; finalização</h3>
+        <p>Corte, cor e som. Pego o material bruto e devolvo pronto pra publicar, do jeito que o projeto pede.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ARTISTAS -->
+<section id="artistas">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <div class="eyebrow">Portfólio</div>
+        <h2 class="section-title">Alguns artistas que tive a honra de gravar</h2>
+      </div>
+    </div>
+    <div class="artists-grid reveal">
+      <div class="art-item"><img src="assets/artist3.jpg" alt="Artista gravado por Ramon Melo"></div>
+      <div class="art-item"><img src="assets/artist4.jpg" alt="Artista gravado por Ramon Melo"></div>
+      <div class="art-item"><img src="assets/artist9.jpg" alt="Artista gravado por Ramon Melo"></div>
+      <div class="art-item"><img src="assets/artist2.jpg" alt="Artista gravado por Ramon Melo"></div>
+      <div class="art-item"><img src="assets/artist6.jpg" alt="Artista gravado por Ramon Melo"></div>
+      <div class="art-item"><img src="assets/artist12.jpg" alt="Artista gravado por Ramon Melo"></div>
+      <div class="art-item"><img src="assets/artist1.jpg" alt="Artista gravado por Ramon Melo"></div>
+      <div class="art-item"><img src="assets/artist5.jpg" alt="Artista gravado por Ramon Melo"></div>
+      <div class="art-item"><img src="assets/artist7.jpg" alt="Artista gravado por Ramon Melo"></div>
+      <div class="art-item"><img src="assets/artist8.jpg" alt="Artista gravado por Ramon Melo"></div>
+      <div class="art-item"><img src="assets/artist10.jpg" alt="Artista gravado por Ramon Melo"></div>
+      <div class="art-item"><img src="assets/artist11.jpg" alt="Artista gravado por Ramon Melo"></div>
+    </div>
+  </div>
+</section>
+
+<!-- MARCAS / EMISSORAS -->
+<section id="marcas">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <div class="eyebrow">Confiança</div>
+        <h2 class="section-title">Emissoras e marcas que já passaram pela lente</h2>
+      </div>
+    </div>
+    <div class="brands-wrap reveal">
+      <div class="brand-plate vf">
+        <span class="c3"></span><span class="c4"></span>
+        <img src="assets/emissoras.jpg" alt="Logos de emissoras e marcas: Globo, SBT, Globosat, GNT, KondZilla, Som Livre, E!">
+      </div>
+      <div class="brand-list">
+        <div class="brand-row"><span>TV Globo</span><span>Emissora</span></div>
+        <div class="brand-row"><span>SBT</span><span>Emissora</span></div>
+        <div class="brand-row"><span>Globosat / GNT</span><span>Canal a cabo</span></div>
+        <div class="brand-row"><span>KondZilla</span><span>Produtora</span></div>
+        <div class="brand-row"><span>Som Livre</span><span>Gravadora</span></div>
+        <div class="brand-row"><span>McDonald's · TIM · L'Oréal</span><span>Marca</span></div>
+        <div class="brand-row"><span>Assaí · Prezunic</span><span>Varejo</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HIGHLIGHT -->
+<section class="highlight">
+  <div class="wrap">
+    <div class="highlight-inner">
+      <h3>Fiz a cobertura da <em>primeira cirurgia</em> de troca de cateter do Brasil. Pegada Grey's Anatomy, tá? rs</h3>
+      <span class="highlight-badge"><span class="rec-dot"></span> AO VIVO</span>
+    </div>
+  </div>
+</section>
+
+<!-- AERIAL -->
+<section>
+  <div class="wrap">
+    <div class="aerial reveal">
+      <div class="aerial-text">
+        <div class="eyebrow">Outro ângulo</div>
+        <h3>Também curto olhar <em>lá do alto</em></h3>
+        <p>Captação aérea com drone pra eventos, imóveis e qualquer projeto que peça um plano geral — literalmente.</p>
+      </div>
+      <div class="aerial-img">
+        <img src="assets/drone.jpg" alt="Ramon Melo operando drone ao ar livre">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRABALHOS / GALERIA -->
+<section id="trabalhos">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <div class="eyebrow">Bastidores</div>
+        <h2 class="section-title">Câmera na mão é o lance</h2>
+      </div>
+      <p class="section-note">Também dirigi um programa de entrevistas com as atrizes Betty Faria e Regiane Alves.</p>
+    </div>
+    <div class="gallery-masonry reveal">
+      <div class="vf"><span class="c3"></span><span class="c4"></span><img src="assets/cam1.jpg" alt="Ramon Melo filmando em estúdio"><span class="vf-tc">STUDIO</span></div>
+      <div class="vf"><span class="c3"></span><span class="c4"></span><img src="assets/entrevistas.jpg" alt="Bastidores de programa de entrevistas"><span class="vf-tc">ENTREVISTA</span></div>
+      <div class="vf"><span class="c3"></span><span class="c4"></span><img src="assets/cam3.jpg" alt="Ramon Melo filmando evento Prainha"><span class="vf-tc">PRAINHA</span></div>
+      <div class="vf"><span class="c3"></span><span class="c4"></span><img src="assets/cam4.jpg" alt="Ramon Melo em cobertura de show"><span class="vf-tc">SHOW</span></div>
+      <div class="vf"><span class="c3"></span><span class="c4"></span><img src="assets/cam5.jpg" alt="Ramon Melo filmando evento à noite"><span class="vf-tc">EVENTO</span></div>
+      <div class="vf"><span class="c3"></span><span class="c4"></span><img src="assets/cam2.jpg" alt="Ramon Melo com câmera de cinema"><span class="vf-tc">SET</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTATO -->
+<section class="contact" id="contato">
+  <div class="wrap">
+    <div class="contact-grid">
+      <div>
+        <div class="eyebrow">Vamos gravar?</div>
+        <h2>QUALQUER<br>COISA, DÁ<br>UM <em>ALÔ!</em></h2>
+        <p class="lead-c">Clipe, show, evento corporativo, comercial de marca — me conta o projeto e a gente conversa sobre como filmar.</p>
+        <div class="contact-links">
+          <a class="contact-row" href="https://wa.me/5521999659494" target="_blank" rel="noopener">
+            <div><div class="cl">WhatsApp</div><div class="cv">(21) 99965-9494</div></div>
+            <span class="arrow">↗</span>
+          </a>
+          <a class="contact-row" href="https://instagram.com/ramonmelo.cine" target="_blank" rel="noopener">
+            <div><div class="cl">Instagram</div><div class="cv">@ramonmelo.cine</div></div>
+            <span class="arrow">↗</span>
+          </a>
+          <a class="contact-row" href="https://linkedin.com/in/ramonmelocorrea" target="_blank" rel="noopener">
+            <div><div class="cl">LinkedIn</div><div class="cv">/ramonmelocorrea</div></div>
+            <span class="arrow">↗</span>
+          </a>
+        </div>
+      </div>
+      <div class="contact-img vf">
+        <span class="c3"></span><span class="c4"></span>
+        <img src="assets/contato.jpg" alt="Ramon Melo operando estabilizador de câmera em evento noturno">
+        <span class="vf-tc">CUT.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-inner">
+      <span>© 2026 RAMON MELO — VÍDEO / DIREÇÃO / EDIÇÃO</span>
+      <span class="rec-tag"><span class="rec-dot"></span> RIO DE JANEIRO, BR</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+// scroll reveal
+const revealEls = document.querySelectorAll('.reveal');
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.classList.add('in');
+      io.unobserve(e.target);
+    }
+  });
+},{threshold:0.12});
+revealEls.forEach(el=>io.observe(el));
+</script>
+
+</body>
+</html>
